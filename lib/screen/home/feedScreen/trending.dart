@@ -1,4 +1,6 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:signum_beat/api/jiosaavn/jiosaavn.dart';
+import 'package:signum_beat/main.dart';
 import 'package:signum_beat/widgets/cards/playlistCard.dart';
 import 'package:signum_beat/widgets/text_widget/normal_text.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,7 @@ class NewTrending extends StatelessWidget {
     final playSongProvider = Provider.of<PlaySongProvider>(context);
 
     return SizedBox(
-      height: 200,
+      height: 130.h,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: newTrending.length,

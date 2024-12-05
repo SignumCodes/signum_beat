@@ -281,6 +281,7 @@ class SongResponse {
   String type;
   SongResponseAlbum album;
   String year;
+  String? mediaPreview;
 
   @JsonKey(name: "release_date")
   String releaseDate;
@@ -318,6 +319,7 @@ class SongResponse {
   SongResponse({
     required this.id,
     this.name,
+    this.mediaPreview,
     required this.type,
     required this.album,
     required this.year,
@@ -343,6 +345,7 @@ class SongResponse {
       id: song.id,
       name: song.song,
       type: song.type,
+      mediaPreview: song.mediaPreviewUrl,
       album: SongResponseAlbum(
         id: song.albumId,
         name: song.album,

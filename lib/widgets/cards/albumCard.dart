@@ -1,4 +1,4 @@
-import 'package:signum_beat/widgets/text_widget/normal_text.dart';
+import  'package:signum_beat/widgets/text_widget/normal_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,11 +6,11 @@ import '../../providers/albumProvider.dart';
 
 
 class AlbumCard extends StatelessWidget {
-  String albumId;
-  double? size;
-  ShapeBorder? shape;
-  Function()? onTap;
-  AlbumCard({
+  final String albumId;
+  final double? size;
+  final ShapeBorder? shape;
+  final Function()? onTap;
+  const AlbumCard({
     required this.albumId,
     this.size = 150,
     this.onTap,
@@ -25,11 +25,11 @@ class AlbumCard extends StatelessWidget {
       child: Consumer<AlbumProvider>(
         builder: (context, albumProvider, child) {
           if (albumProvider.isLoading) {
-            return Center(
+            return const Center(
               );
           }
           if (albumProvider.albumDetails == null) {
-            return Center(
+            return const Center(
                 child: NormalText(text: 'No data available'),
             );
           }
@@ -48,11 +48,11 @@ class AlbumCard extends StatelessWidget {
                             color: Theme.of(context).primaryColor,
                             blurRadius: 5,
                             spreadRadius:5,
-                            offset: Offset(0,5)
+                            offset: const Offset(0,5)
                           )
                         ]
                       ),
-                      child: Image.network(data!.image!.first.link)?? Image(image: NetworkImage('https://i.pinimg.com/originals/e5/e5/c1/e5e5c165395678ba1875abb4dc668292.png')),
+                      child: Image.network(data!.image!.first.link),
 
                     ),
                   /*  Card(
@@ -61,8 +61,7 @@ class AlbumCard extends StatelessWidget {
                       clipBehavior: Clip.antiAlias,
                       child: Image.network(data!.image!.first.link)?? Image(image: NetworkImage('https://i.pinimg.com/originals/e5/e5/c1/e5e5c165395678ba1875abb4dc668292.png')),
                     ),*/
-                    NormalText(text: data!.name)??Container(),
-                    NormalText(text: '')??Container()
+                    NormalText(text: data.name)
                   ],
                 )
             ),

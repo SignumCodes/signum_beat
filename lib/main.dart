@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
+import 'package:signum_beat/screen/artist/artist_more_detail.dart';
 
 import 'firebase_options.dart';
 import 'providers/albumProvider.dart';
@@ -52,6 +53,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => DownloadProvider()),
       ChangeNotifierProvider(create: (_) => PlaylistProvider()),
       ChangeNotifierProvider(create: (_) => ArtistProvider()),
+      ChangeNotifierProvider(create: (_) => ArtistMoreDetailProvider()),
       ChangeNotifierProvider(create: (_) => SearchMusicProvider()),
 
     ],

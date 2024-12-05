@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import '../client.dart';
 import '../collection/endpoints.dart';
 import '../models/album.dart';
@@ -110,4 +112,19 @@ class SearchEndpoint extends BaseClient {
     final req = PlaylistSearchRequest.fromJson(response);
     return req;
   }
+
+  Future<List<TopSearchResponse>> topSearch() async {
+    try {
+      // Fetch data from the API
+      final result = await requestReco(
+        call: endpoints.search.topSearch,
+      );
+        return result.map((e)=>TopSearchResponse.fromJson(e)).toList();
+    } catch (e) {
+      // Handle and log errors
+      throw Exception('Failed to fetch top search results: $e');
+    }
+  }
+
+
 }

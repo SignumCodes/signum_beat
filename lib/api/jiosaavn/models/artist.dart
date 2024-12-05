@@ -51,6 +51,19 @@ class ArtistSongResponse {
       _$ArtistSongResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ArtistSongResponseToJson(this);
+
+  ArtistSongResponse copyWith({
+    int? total,
+    bool? lastPage,
+    List<SongResponse>? results,
+  }) {
+    return ArtistSongResponse(
+      total: total ?? this.total,
+      lastPage: lastPage ?? this.lastPage,
+      results: results ?? this.results,
+    );
+  }
+
 }
 
 @JsonSerializable()
@@ -68,6 +81,18 @@ class ArtistAlbumResponse {
       _$ArtistAlbumResponseFromJson(json);
 
   Map<String, dynamic> toJson() => _$ArtistAlbumResponseToJson(this);
+
+  ArtistAlbumResponse copyWith({
+    int? total,
+    bool? lastPage,
+    List<AlbumResponse>? results,
+  }) {
+    return ArtistAlbumResponse(
+      total: total ?? this.total,
+      lastPage: lastPage ?? this.lastPage,
+      results: results ?? this.results,
+    );
+  }
 }
 
 @JsonSerializable()

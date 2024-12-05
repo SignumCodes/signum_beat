@@ -122,6 +122,7 @@ AlbumResponse _$AlbumResponseFromJson(Map<String, dynamic> json) =>
     AlbumResponse(
       id: json['id'] as String,
       name: json['name'] as String,
+      subTitle: json['subtitle']??'',
       year: json['year'] as String,
       type: json['type'] as String?,
       playCount: json['play_count'] as String?,

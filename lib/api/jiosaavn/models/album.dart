@@ -146,6 +146,7 @@ class AlbumSearchResponse {
 class AlbumResponse {
   String id;
   String name;
+  String subTitle;
   String year;
   String? type;
 
@@ -182,6 +183,7 @@ class AlbumResponse {
   AlbumResponse({
     required this.id,
     required this.name,
+    required this.subTitle,
     required this.year,
     this.type,
     this.playCount,
@@ -203,6 +205,7 @@ class AlbumResponse {
     return AlbumResponse(
       id: (album.albumId ?? album.id) as String,
       name: album.title,
+      subTitle: album.subtitle??'',
       year: album.year,
       type: album.type,
       releaseDate: album.releaseDate,

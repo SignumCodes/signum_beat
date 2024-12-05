@@ -1,4 +1,5 @@
 import 'package:signum_beat/api/jiosaavn/jiosaavn.dart';
+import 'package:signum_beat/api/jiosaavn/models/song.dart';
 import 'package:signum_beat/main.dart';
 import 'package:signum_beat/providers/playSong/playSongProvider.dart';
 import 'package:signum_beat/widgets/text_widget/normal_text.dart';
@@ -14,6 +15,7 @@ import '../../utils/constants/color_const.dart';
 import '../../utils/constants/const_var.dart';
 import '../../widgets/custom_card.dart';
 import '../../widgets/tile/songTile.dart';
+import 'video_player.dart';
 
 class MainPlayer extends StatefulWidget {
   final List<dynamic> data;
@@ -275,7 +277,12 @@ class _MainPlayerState extends State<MainPlayer> with SingleTickerProviderStateM
 
   Widget songResponseWidget() {
     var playProvider = Provider.of<PlaySongProvider>(context);
+    if(playProvider.playingModSong.mediaPreview!='') {
+      return Container(
+        height: 500,
 
+          child: VideoPlayers(path :playProvider.playingModSong.mediaPreview));
+    }
     return Column(children: [
        SizedBox(height: 50.h,),
       Padding(

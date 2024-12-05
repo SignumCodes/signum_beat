@@ -356,3 +356,53 @@ class SearchTopQueryResponse {
 
   Map<String, dynamic> toJson() => _$SearchTopQueryResponseToJson(this);
 }
+
+
+class TopSearchResponse {
+  final String id;
+  final String title;
+  final String subtitle;
+  final String type;
+  final String image;
+  final String permaUrl;
+  final String explicitContent;
+  final bool miniObj;
+
+  TopSearchResponse({
+    required this.id,
+    required this.title,
+    required this.subtitle,
+    required this.type,
+    required this.image,
+    required this.permaUrl,
+    required this.explicitContent,
+    required this.miniObj,
+  });
+
+  factory TopSearchResponse.fromJson(Map<String, dynamic> json) {
+    return TopSearchResponse(
+      id: json['id'],
+      title: json['title'],
+      subtitle: json['subtitle'],
+      type: json['type'],
+      image: json['image'],
+      permaUrl: json['perma_url'],
+      explicitContent: json['explicit_content'],
+      miniObj: json['mini_obj'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'subtitle': subtitle,
+      'type': type,
+      'image': image,
+      'perma_url': permaUrl,
+      'explicit_content': explicitContent,
+      'mini_obj': miniObj,
+    };
+  }
+}
+

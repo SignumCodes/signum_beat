@@ -1,4 +1,5 @@
 import 'package:signum_beat/providers/artist_provider.dart';
+import 'package:signum_beat/screen/artist/artist_more_detail.dart';
 import 'package:signum_beat/screen/tileDetails/playlist_detail.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +27,7 @@ import 'albumDetail.dart';
 class ArtistDetail extends StatelessWidget {
   final String artistId;
 
-  ArtistDetail({
+  const ArtistDetail({
     super.key,
     required this.artistId,
   });
@@ -54,7 +55,7 @@ class ArtistDetail extends StatelessWidget {
               ),
             );
           }
-          var data = provider.artistDetail!;
+          var data = provider.artistDetail;
           return Scaffold(
             body: CustomScrollView(
               controller: appBarState.scrollController,
@@ -124,7 +125,7 @@ class ArtistDetail extends StatelessWidget {
                           children: [
                             NormalText(
                               text: HtmlUnescape()
-                                  .convert(provider.artistDetail!['name']),
+                                  .convert(provider.artistDetail['name']),
                               fontSize: 14.dg,
                               color: Colors.white,
                               textAlign: TextAlign.start,
@@ -134,7 +135,7 @@ class ArtistDetail extends StatelessWidget {
                               text: TextSpan(children: [
                                 TextSpan(
                                     text: HtmlUnescape().convert(
-                                        provider.artistDetail!['type']),
+                                        provider.artistDetail['type']),
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.white.withOpacity(0.7),
@@ -147,7 +148,7 @@ class ArtistDetail extends StatelessWidget {
                                     )),
                                 TextSpan(
                                     text: HtmlUnescape().convert(provider
-                                        .artistDetail!['follower_count']),
+                                        .artistDetail['follower_count']),
                                     style: TextStyle(
                                       fontSize: 12,
                                       color: Colors.white.withOpacity(0.7),
@@ -162,7 +163,7 @@ class ArtistDetail extends StatelessWidget {
                       fit: StackFit.expand,
                       children: [
                         Image.network(
-                          provider.artistDetail!['image'],
+                          provider.artistDetail['image'],
                           fit: BoxFit.cover,
                         ),
                         Container(
@@ -284,7 +285,7 @@ class ArtistDetail extends StatelessWidget {
                           ? Padding(
                               padding: EdgeInsets.all(5.h),
                               child:  NormalText(
-                                text: "Only By ${provider.artistDetail!['name']}",
+                                text: "Only By ${provider.artistDetail['name']}",
                                 fontWeight: FontWeight.bold,
                                 fontSize: 16,
                                 textAlign: TextAlign.start,
@@ -333,7 +334,7 @@ class ArtistDetail extends StatelessWidget {
                           : CustomCardShimmer(size: 100.h),
 
                       ///Dedicated  Playlist
-                      provider.dedicatedArtistPlaylists!.isNotEmpty
+                      provider.dedicatedArtistPlaylists.isNotEmpty
                           ? Padding(
                               padding: EdgeInsets.all(5.h),
                               child: const NormalText(
@@ -351,16 +352,16 @@ class ArtistDetail extends StatelessWidget {
                                 child: TitlePlaceholder(width: 200),
                               ),
                             ),
-                      provider.dedicatedArtistPlaylists!.isNotEmpty
+                      provider.dedicatedArtistPlaylists.isNotEmpty
                           ? SizedBox(
                               height: 140.h,
                               child: ListView.builder(
                                 scrollDirection: Axis.horizontal,
                                 itemCount:
-                                    provider.dedicatedArtistPlaylists!.length,
+                                    provider.dedicatedArtistPlaylists.length,
                                 itemBuilder: (context, index) {
                                   var playlist =
-                                      provider.dedicatedArtistPlaylists![index];
+                                      provider.dedicatedArtistPlaylists[index];
                                   return PlaylistCard(
                                     title: NormalText(
                                       text: playlist.name.toString(),
@@ -498,28 +499,31 @@ class ArtistDetail extends StatelessWidget {
                       )
                           : CustomCardShimmer(size: 100.h),
 
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            width: 200,
-                            height: 30,
-                            decoration: BoxDecoration(
-                                border: Border.all(color: Theme.of(context).primaryColor),
-                              borderRadius: BorderRadius.circular(15)
+                      GestureDetector(
+                        onTap: ()=>Navigator.push(context,MaterialPageRoute(builder: (context)=>ArtistMoreDetail(artistId: artistId))),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 200,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: Theme.of(context).primaryColor),
+                                borderRadius: BorderRadius.circular(15)
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  NormalText(text: 'More ${provider.artistDetail['name']}'),
+                                  const Icon(Icons.navigate_next)
+                                ],
+                              ),
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                NormalText(text: 'More ${provider.artistDetail['name']}'),
-                                Icon(Icons.navigate_next)
-                              ],
-                            ),
-                          ),
 
-                        ],
+                          ],
+                        ),
                       ),
-                      SizedBox(height: 100,)
+                      const SizedBox(height: 100,)
                     ],
                   ),
                 )

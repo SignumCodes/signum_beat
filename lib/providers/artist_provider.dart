@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 import '../api/jiosaavn/jiosaavn.dart';
+import '../api/jiosaavn/models/artist.dart';
 import '../api/jiosaavn/models/playlist.dart';
 import '../api/jiosaavn/models/song.dart';
 
@@ -18,6 +19,7 @@ class ArtistProvider extends ChangeNotifier {
   List<SongResponse> _topSongs = [];
   bool _isLoading = false;
 
+
   // Getters for each property
   Map<String, dynamic> get artistDetail => _artistDetail;
   List<PlaylistResponse> get dedicatedArtistPlaylists => _dedicatedArtistPlaylists;
@@ -30,7 +32,6 @@ class ArtistProvider extends ChangeNotifier {
   bool get isLoading => _isLoading;
 
 
-  // Method to fetch and update artist details
   Future<void> getArtistDetails(String artistId) async {
     _isLoading = true;
     try {
@@ -60,4 +61,7 @@ class ArtistProvider extends ChangeNotifier {
       print("Error fetching artist details: $e");
     }
   }
+
+
+
 }

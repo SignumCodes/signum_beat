@@ -1,3 +1,5 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:signum_beat/main.dart';
 import 'package:signum_beat/widgets/text_widget/normal_text.dart';
 import 'package:flutter/material.dart';
 
@@ -12,7 +14,7 @@ class TopCharts extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 200,
+      height: 130.h,
       width: double.infinity,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,

@@ -27,7 +27,6 @@ class HomeScreen extends StatelessWidget {
               );
             } else if (provider.module.newTrending == null ||
                 provider.module.newTrending!.isEmpty) {
-
               return const Center(
                 child: NormalText(
                   text: 'No data found',
@@ -45,39 +44,55 @@ class HomeScreen extends StatelessWidget {
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
-                    newTrending!.isNotEmpty?NewTrending(newTrending: newTrending,):const SizedBox(),
+                    newTrending!.isNotEmpty
+                        ? NewTrending(
+                            newTrending: newTrending,
+                          )
+                        : const SizedBox(),
                     const NormalText(
                       text: 'Recomonded Artist',
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
                     artist.isNotEmpty
-                        ? RecommendedArtist(artist: artist,)
+                        ? RecommendedArtist(
+                            artist: artist,
+                          )
                         : const SizedBox(),
                     const NormalText(
                       text: 'Top Charts',
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
-                    provider.module.charts!.isNotEmpty?TopCharts(chart: provider.module.charts!,):const SizedBox(),
+                    provider.module.charts!.isNotEmpty
+                        ? TopCharts(
+                            chart: provider.module.charts!,
+                          )
+                        : const SizedBox(),
                     const NormalText(
                       text: 'New Release Album',
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
-                    provider.module.newAlbums!.isNotEmpty?NewAlbum(album: provider.module.newAlbums!,):const SizedBox(),
+                    provider.module.newAlbums!.isNotEmpty
+                        ? NewAlbum(
+                            album: provider.module.newAlbums!,
+                          )
+                        : const SizedBox(),
                     const NormalText(
                       text: 'Top Playlist',
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                     ),
-                    provider.module.topPlaylists!.isNotEmpty?TopPlaylist(playlists: provider.module.topPlaylists!,):const SizedBox(),
+                    provider.module.topPlaylists!.isNotEmpty
+                        ? TopPlaylist(
+                            playlists: provider.module.topPlaylists!,
+                          )
+                        : const SizedBox(),
                   ],
                 ),
               );
             }
-
-
           },
         ),
       ),

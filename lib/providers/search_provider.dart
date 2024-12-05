@@ -16,6 +16,7 @@ class SearchMusicProvider with ChangeNotifier {
   List<PlaylistResponse> _searchPlaylist = [];
   List<ArtistResponse> _searchArtist = [];
   List<AlbumResponse> _searchAlbum = [];
+  List<TopSearchResponse> _topSearchResponse = [];
   TextEditingController searchTextController = TextEditingController();
 
   // Getters
@@ -26,6 +27,8 @@ class SearchMusicProvider with ChangeNotifier {
   List<PlaylistResponse> get searchPlaylist => _searchPlaylist;
   List<ArtistResponse> get searchArtist => _searchArtist;
   List<AlbumResponse> get searchAlbum => _searchAlbum;
+  List<TopSearchResponse> get topSearchResponse => _topSearchResponse;
+
 
   Future<void> getSearchModule(String query) async {
     try {
@@ -88,17 +91,10 @@ class SearchMusicProvider with ChangeNotifier {
     }
   }*/
 
-  Future<List<SongResponse>> weeklyTopSongList() async {
-    try {
-      var module = await jio.module.getGlobalConfig();
-      var weeklyTopSongsListId = module?['weekly_top_songs_listid']['hindi']['listid'];
-      PlaylistResponse playlist = await jio.playlist.detailsById(weeklyTopSongsListId);
-      var ids = playlist.songs?.map((e) => e.id).toList();
-      var songs = await jio.songs.detailsByIds(ids!);
-      return songs;
-    } catch (e) {
-      print(e);
-      return [];
-    }
+  Future<void> getTopSearch()async{
+    _topSearchResponse  = await jio.search.topSearch();
+    notifyListeners();
   }
+
+
 }

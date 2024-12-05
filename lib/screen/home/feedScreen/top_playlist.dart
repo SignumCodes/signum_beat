@@ -14,7 +14,7 @@ class TopPlaylist extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 170.h,
+      height: 130.h,
       width: double.infinity,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,

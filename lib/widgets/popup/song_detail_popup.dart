@@ -22,7 +22,7 @@ songDetailPopup(BuildContext context, SongResponse song) async {
       child: Material(
         type: MaterialType.transparency,
         child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           width: 500, // Set your desired width
           height: 900, // Set your desired height
           child: Stack(
@@ -39,7 +39,7 @@ songDetailPopup(BuildContext context, SongResponse song) async {
                           color: Theme.of(context).cardColor),
                       child: Column(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             height: 70,
                           ),
                           Column(
@@ -86,7 +86,7 @@ songDetailPopup(BuildContext context, SongResponse song) async {
                                       // Fluttertoast.showToast(msg: 'Added to favourite');
                                     },
                                   ),
-                                  IconText(
+                                  const IconText(
                                     text: 'Add to Playlist',
                                     icon: CupertinoIcons.music_note_list,
                                   ),
@@ -115,11 +115,11 @@ songDetailPopup(BuildContext context, SongResponse song) async {
                                             .downloadSong(songMetaData);
                                         // playSongProvider.downloadAndTagSong(song.downloadUrl!.last.link,song.image!.last.link, fileName: '', artist: '', album: '');
                                       }),
-                                  IconText(
+                                  const IconText(
                                     text: 'Share',
                                     icon: Icons.share,
                                   ),
-                                  IconText(
+                                 /* IconText(
                                     text: 'Detail',
                                     icon: Icons.details,
                                     onTap: () {
@@ -129,7 +129,7 @@ songDetailPopup(BuildContext context, SongResponse song) async {
                                               builder: (c) =>
                                                   SongDetails(song: song)));
                                     },
-                                  ),
+                                  ),*/
                                 ],
                               ),
                             ),
@@ -147,7 +147,7 @@ songDetailPopup(BuildContext context, SongResponse song) async {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
                               color: Theme.of(context).cardColor),
-                          child: Center(
+                          child: const Center(
                             child: NormalText(
                               text: "Cancel",
                               fontSize: 20,

@@ -2,6 +2,7 @@ const endpoints = (
   modules: 'webapi.getLaunchData',
   search: (
     all: 'autocomplete.get',
+    topSearch: 'content.getTopSearches',
     songs: 'search.getResults',
     albums: 'search.getAlbumResults',
     artists: 'search.getArtistResults',

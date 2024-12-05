@@ -150,6 +150,7 @@ PlaylistSongResponse _$PlaylistSongResponse(Map<String, dynamic> json)=> Playlis
 SongResponse _$SongResponseFromJson(Map<String, dynamic> json) => SongResponse(
       id: json['id'] as String,
       name: json['name'] as String?,
+      mediaPreview: json['media_preview_url']??'',
       type: json['type'] as String,
       album: SongResponseAlbum.fromJson(json['album'] ),
       year: json['year'] as String,
