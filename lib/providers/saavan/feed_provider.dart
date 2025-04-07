@@ -30,8 +30,9 @@ class FeedProvider with ChangeNotifier {
       _module = await jio.module.getModules();
       _recoArtist = await jio.module.getArtist()??[];
       _hasLoaded = true;
-    } catch (e) {
+    } catch (e,st) {
       print('Error loading modules: $e');
+      print('Error loading modules: $st');
 
     } finally {
       _isLoading = false;

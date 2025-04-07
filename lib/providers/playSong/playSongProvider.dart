@@ -76,7 +76,7 @@ class PlaySongProvider with ChangeNotifier {
 
     const androidInitialize = AndroidInitializationSettings('@mipmap/ic_launcher');
     final initializationSettings = InitializationSettings(android: androidInitialize);
-    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+    // await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
     audioPlayer.playerStateStream.listen((playerState) {
       audioPlayer.processingStateStream.listen((processingState) {
@@ -128,26 +128,52 @@ class PlaySongProvider with ChangeNotifier {
   }
 
   void playNextSong() {
-    if (_playIndex < UniVarProvider.data.length - 1) {
-      var nextIndex = _playIndex + 1;
+    try {
+      // Check if there are songs in the playlist
+      if (UniVarProvider.data.isEmpty) {
+        print('No songs in the playlist');
+        audioPlayer.stop();
+        _isPlaying = false;
+        notifyListeners();
+        return;
+      }
+
+      // Determine the next index
+      int nextIndex;
+      if (_playIndex < UniVarProvider.data.length - 1) {
+        nextIndex = _playIndex + 1;
+      } else {
+        // If at the last song, loop back to the first song
+        nextIndex = 0;
+      }
+
+      // Get the next song
       var nextSong = UniVarProvider.data[nextIndex];
+
+      // Play the next song
       playSong(nextSong, nextIndex);
-    } else if (_playIndex == UniVarProvider.data.length - 1) {
-      var nextSong = UniVarProvider.data[0];
-      playSong(nextSong, 0);
-    } else {
+    } catch (e) {
+      print('Error playing next song: $e');
+      // Fallback to stopping playback if something goes wrong
       audioPlayer.stop();
       _isPlaying = false;
     }
+
     notifyListeners();
   }
 
   void updatePosition() {
     audioPlayer.durationStream.listen((d) {
-      _duration = d.toString().split(".")[0];
-      _max = d!.inSeconds.toDouble();
+      if (d != null) {
+        _duration = d.toString().split(".")[0];
+        _max = d.inSeconds.toDouble();
+      } else {
+        _duration = "0:00";
+        _max = 0.0;
+      }
       notifyListeners();
     });
+
     audioPlayer.positionStream.listen((p) {
       _position = p.toString().split(".")[0];
       _value = p.inSeconds.toDouble();

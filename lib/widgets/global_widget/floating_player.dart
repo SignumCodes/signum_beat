@@ -23,18 +23,7 @@ class FloatingPlayerBody extends StatelessWidget {
           stream: playSongProvider.audioPlayer.processingStateStream,
           builder: (context, snapshot) {
             if (snapshot.hasData && snapshot.data == ProcessingState.ready) {
-              return Container(
-                padding:EdgeInsets.symmetric(horizontal: 0,vertical: 2),
-                margin:EdgeInsets.symmetric(horizontal: 10),
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(30),
-                    gradient: LinearGradient(
-                      begin: Alignment.bottomLeft,
-                      end: Alignment.topRight,
-                      colors: [AppColor.mainColor,Colors.deepPurple]
-                    )
-                  ),
-                  child: FloatingPlayer());
+              return const FloatingPlayer();
             } else {
               return Container(); // Return an empty sized box if processing state is not ready
             }

@@ -1,10 +1,11 @@
-import 'package:signum_beat/widgets/text_widget/normal_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:signum_beat/widgets/text_widget/normal_text.dart';
 import '../../../utils/constants/const_var.dart';
+import '../../../widgets/cards/home_card.dart';
 import '../../../widgets/cards/playlistCard.dart';
 import '../../tileDetails/playlist_detail.dart';
-
 
 class TopPlaylist extends StatelessWidget {
   final List<dynamic> playlists;
@@ -13,33 +14,47 @@ class TopPlaylist extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 130.h,
-      width: double.infinity,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: playlists.length,
-        itemBuilder: (c, index) {
-          return PlaylistCard(
-            onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>PlayListDetail(playlistId: playlists[index]['listid'],)));
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: const NormalText(
+            text: 'Top Playlists',
+
+          ),
+        ),
+        SizedBox(height: 10.h),
+        SizedBox(
+          height: 160.h,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: playlists.length,
+            padding: EdgeInsets.symmetric(horizontal: 16.w),
+            itemBuilder: (context, index) {
+              return HomeCard(
+                type: 'playlist',
+               imageUrl: playlists[index]['image']!.startsWith("http")
+                  ? playlists[index]['image'].toString()
+                  : appImage,
+                title:  playlists[index]['listname'],
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PlayListDetail(
+                        playlistId: playlists[index]['listid'],
+                      ),
+                    ),
+                  );
+                }, id: playlists[index]['listid'].toString(),
+              );
+
 
             },
-            title: NormalText(
-              text: playlists[index]['listname'],
-              overflow: TextOverflow.ellipsis,
-            ),
-            leading: Image(
-              image: NetworkImage(
-                playlists[index]['image']!.startsWith("http")
-                    ? playlists[index]['image'].toString()
-                    : appImage,
-              ),
-            ),
-            // NormalText:NormalText(text: songs[i].primaryArtists,overflow: TextOverflow.ellipsis,),
-          );
-        },
-      ),
+          ),
+        ),
+      ],
     );
   }
 }

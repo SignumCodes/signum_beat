@@ -38,7 +38,7 @@ abstract class BaseClient {
     // Print request URL and payload
     log("Request URL: $requestUrl");
     log("Request Payload: $requestPayload");
-    final userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+    const userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
         "(KHTML, like Gecko) Chrome/89.0.4389.82 Safari/537.36";
 
     final res = await dio.get(
@@ -57,7 +57,13 @@ abstract class BaseClient {
     log("Response URL: ${res.realUri}");
     log("Response Data: ${res.data}");
 
-    return jsonDecode(res.data) as Map<String, dynamic>;
+    if (res.data is String) {
+      return jsonDecode(res.data) as Map<String, dynamic>;
+    } else if (res.data is Map<String, dynamic>) {
+      return res.data as Map<String, dynamic>;
+    } else {
+      throw Exception('Unexpected response type: ${res.data.runtimeType}');
+    }
   }
  Future<List> requestReco({
     /// Use [endpoints] from [lib/collection/endpoints.dart]

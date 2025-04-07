@@ -7,7 +7,7 @@ import 'package:signum_beat/providers/playlist_provider.dart';
 import 'package:signum_beat/providers/search_provider.dart';
 import 'package:signum_beat/providers/song_detail_provider.dart';
 import 'package:signum_beat/providers/state_provider/app_bar_state_provider.dart';
-import 'package:firebase_core/firebase_core.dart';
+// import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,16 +34,14 @@ Future<void> main() async {
     android: initializationSettingsAndroid,
   );
 
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => PermissionProvider()),
       ChangeNotifierProvider(create: (_) => CounterProvider()),
       ChangeNotifierProvider(create: (_) => NavigationProvider()),
-      ChangeNotifierProvider(create: (_)=>AuthenticationProvider()),
+      // ChangeNotifierProvider(create: (_)=>AuthenticationProvider()),
       ChangeNotifierProvider(create: (_) => FeedProvider()..loadModules()),
       ChangeNotifierProvider(create: (_) => UniVarProvider()),
       ChangeNotifierProvider(create: (_) => PlaySongProvider()),

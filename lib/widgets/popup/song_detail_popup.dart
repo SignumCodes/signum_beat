@@ -14,8 +14,8 @@ import '../icon_text.dart';
 
 songDetailPopup(BuildContext context, SongResponse song) async {
   var downloadProvider = Provider.of<DownloadProvider>(context, listen: false);
-  final playSongProvider =
-      Provider.of<PlaySongProvider>(context, listen: false);
+  final playSongProvider = Provider.of<PlaySongProvider>(context, listen: false);
+
   showGeneralDialog(
     context: context,
     pageBuilder: (context, animation, secondaryAnimation) => Center(
@@ -23,8 +23,8 @@ songDetailPopup(BuildContext context, SongResponse song) async {
         type: MaterialType.transparency,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 10),
-          width: 500, // Set your desired width
-          height: 900, // Set your desired height
+          width: 500,
+          height: 900,
           child: Stack(
             children: [
               Positioned(
@@ -32,27 +32,46 @@ songDetailPopup(BuildContext context, SongResponse song) async {
                 child: Column(
                   children: [
                     Container(
-                      height: 450,
+                      height: 500, // Increased height
                       width: 370,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Theme.of(context).cardColor),
+                        borderRadius: BorderRadius.circular(20), // More rounded corners
+                        color: Theme.of(context).cardColor.withOpacity(0.9), // Slight transparency
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.2),
+                            spreadRadius: 5,
+                            blurRadius: 15,
+                            offset: const Offset(0, 5),
+                          )
+                        ],
+                      ),
                       child: Column(
                         children: [
-                          const SizedBox(
-                            height: 70,
-                          ),
+                          const SizedBox(height: 90), // Adjusted for image overlap
                           Column(
                             children: [
-                              NormalText(
-                                  text: song.name.toString(),
-                                  fontSize: 20,
-                                  overflow: TextOverflow.ellipsis),
-                              NormalText(
-                                text: song.primaryArtists,
-                                fontSize: 16,
+                              Text(
+                                song.name.toString(),
+                                style: TextStyle(
+                                  fontSize: 22.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Theme.of(context).textTheme.bodyLarge?.color,
+                                ),
+                                textAlign: TextAlign.center,
                                 overflow: TextOverflow.ellipsis,
-                              )
+                                maxLines: 2,
+                              ),
+                              Text(
+                                song.primaryArtists,
+                                style: TextStyle(
+                                  fontSize: 18.sp,
+                                  color: Theme.of(context).textTheme.bodyMedium?.color?.withOpacity(0.7),
+                                ),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 20),
                             ],
                           ),
                           Expanded(
@@ -60,76 +79,70 @@ songDetailPopup(BuildContext context, SongResponse song) async {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  IconText(
+                                  _buildStyledIconText(
+                                    context,
+                                    icon: CupertinoIcons.play_circle_fill,
                                     text: 'Play now',
-                                    icon: CupertinoIcons.play,
                                     onTap: () {
                                       playSongProvider.playSong(song, 0);
                                       Navigator.pop(context);
                                     },
                                   ),
-                                  IconText(
-                                      text: 'Play next',
-                                      icon: Icons.queue_play_next,
-                                      onTap: () {
-                                        UniVarProvider.data.cast<SongResponse>().removeWhere((SongResponse son) {
-                                          return son.id == song.id;
-                                        });
-                                        UniVarProvider.data.insert(playSongProvider.playIndex+1, song);
-                                        Navigator.pop(context);
-                                      }),
-                                  IconText(
-                                    text: 'Mark to Favourite',
-                                    icon: CupertinoIcons.heart,
+                                  _buildStyledIconText(
+                                    context,
+                                    icon: Icons.queue_music_rounded,
+                                    text: 'Play next',
                                     onTap: () {
-                                      // UniVar.favouriteSong.add(song);
-                                      // Fluttertoast.showToast(msg: 'Added to favourite');
+                                      UniVarProvider.data.cast<SongResponse>().removeWhere((SongResponse son) {
+                                        return son.id == song.id;
+                                      });
+                                      UniVarProvider.data.insert(playSongProvider.playIndex+1, song);
+                                      Navigator.pop(context);
                                     },
                                   ),
-                                  const IconText(
-                                    text: 'Add to Playlist',
-                                    icon: CupertinoIcons.music_note_list,
+                                  _buildStyledIconText(
+                                    context,
+                                    icon: CupertinoIcons.heart_circle_fill,
+                                    text: 'Mark to Favourite',
+                                    onTap: () {
+                                      // Favorite implementation
+                                    },
                                   ),
-                                  IconText(
-                                    text: 'Add to Queue',
+                                  _buildStyledIconText(
+                                    context,
+                                    icon: CupertinoIcons.music_note_list,
+                                    text: 'Add to Playlist',
+                                  ),
+                                  _buildStyledIconText(
+                                    context,
                                     icon: Icons.playlist_add_rounded,
+                                    text: 'Add to Queue',
                                     onTap: (){
                                       UniVarProvider.data.add(song);
                                       Navigator.pop(context);
                                     },
                                   ),
-                                  IconText(
-                                      text: 'Download',
-                                      icon: CupertinoIcons.arrow_down_to_line,
-                                      onTap: () {
-                                        var songMetaData = SongMetadata(
-                                            fileName: song.name ?? 'song',
-                                            filePath: '',
-                                            artist: song.primaryArtists,
-                                            album: song.album.name,
-                                            songThumbnailUrl:
-                                                song.image!.last.link,
-                                            downloadUrl:
-                                                song.downloadUrl!.last.link);
-                                        downloadProvider
-                                            .downloadSong(songMetaData);
-                                        // playSongProvider.downloadAndTagSong(song.downloadUrl!.last.link,song.image!.last.link, fileName: '', artist: '', album: '');
-                                      }),
-                                  const IconText(
-                                    text: 'Share',
-                                    icon: Icons.share,
-                                  ),
-                                 /* IconText(
-                                    text: 'Detail',
-                                    icon: Icons.details,
+                                  _buildStyledIconText(
+                                    context,
+                                    icon: CupertinoIcons.cloud_download_fill,
+                                    text: 'Download',
                                     onTap: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (c) =>
-                                                  SongDetails(song: song)));
+                                      var songMetaData = SongMetadata(
+                                          fileName: song.name ?? 'song',
+                                          filePath: '',
+                                          artist: song.primaryArtists,
+                                          album: song.album.name,
+                                          songThumbnailUrl: song.image!.last.link,
+                                          downloadUrl: song.downloadUrl!.last.link
+                                      );
+                                      downloadProvider.downloadSong(songMetaData);
                                     },
-                                  ),*/
+                                  ),
+                                  _buildStyledIconText(
+                                    context,
+                                    icon: Icons.share_rounded,
+                                    text: 'Share',
+                                  ),
                                 ],
                               ),
                             ),
@@ -138,19 +151,32 @@ songDetailPopup(BuildContext context, SongResponse song) async {
                       ),
                     ),
                     Padding(
-                      padding: EdgeInsets.only(top: 8.h),
+                      padding: EdgeInsets.only(top: 12.h),
                       child: GestureDetector(
                         onTap: () => Navigator.pop(context),
                         child: Container(
-                          height: 50,
+                          height: 60,
                           width: 370,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: Theme.of(context).cardColor),
-                          child: const Center(
-                            child: NormalText(
-                              text: "Cancel",
-                              fontSize: 20,
+                            borderRadius: BorderRadius.circular(15),
+                            color: Theme.of(context).cardColor.withOpacity(0.9),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                spreadRadius: 3,
+                                blurRadius: 10,
+                                offset: const Offset(0, 3),
+                              )
+                            ],
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Cancel",
+                              style: TextStyle(
+                                fontSize: 20.sp,
+                                fontWeight: FontWeight.bold,
+                                color: Theme.of(context).textTheme.bodyLarge?.color,
+                              ),
                             ),
                           ),
                         ),
@@ -160,13 +186,31 @@ songDetailPopup(BuildContext context, SongResponse song) async {
                 ),
               ),
               Positioned(
-                  top: 0,
-                  left: 100,
-                  child: CustomCard(
-                    leading: Image(
-                      image: NetworkImage(song.image!.last.link),
+                top: 0,
+                left: 100,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        spreadRadius: 3,
+                        blurRadius: 15,
+                        offset: const Offset(0, 5),
+                      )
+                    ],
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: Image.network(
+                      song.image!.last.link,
+                      width: 170,
+                      height: 170,
+                      fit: BoxFit.cover,
                     ),
-                  )),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -186,7 +230,49 @@ songDetailPopup(BuildContext context, SongResponse song) async {
     },
     transitionDuration: const Duration(milliseconds: 300),
     barrierLabel: 'Dismiss',
-    // Provide a non-null value for barrierLabel
     barrierDismissible: true,
+  );
+}
+
+// Helper method for consistent styling of icon texts
+Widget _buildStyledIconText(
+    BuildContext context, {
+      required IconData icon,
+      required String text,
+      VoidCallback? onTap,
+    }) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+    child: Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(10),
+        onTap: onTap,
+        child: Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Theme.of(context).cardColor.withOpacity(0.5),
+          ),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                color: Theme.of(context).primaryColor,
+                size: 24,
+              ),
+              const SizedBox(width: 15),
+              Text(
+                text,
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
   );
 }

@@ -16,10 +16,6 @@ dependencies:
   cupertino_icons: ^1.0.6
   html_unescape: ^2.0.0
   provider: ^6.1.2
-  firebase_core:
-  firebase_auth:
-  cloud_firestore:
-  google_sign_in:
   dio: ^5.4.3+1
   json_annotation: ^4.9.0
   dart_des: ^1.0.2
@@ -34,6 +30,11 @@ dependencies:
   id3_codec: ^1.0.3
   video_player: ^2.9.2
   flutter_local_notifications: ^17.2.4
+  cached_network_image: ^3.4.1
+  glassmorphism: ^3.0.0
+  animate_do: ^4.2.0
+  dio_cookie_manager: ^3.2.0
+  cookie_jar: ^4.0.8
  
 
 dev_dependencies:

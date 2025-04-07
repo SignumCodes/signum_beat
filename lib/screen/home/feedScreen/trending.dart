@@ -1,87 +1,222 @@
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:signum_beat/api/jiosaavn/jiosaavn.dart';
-import 'package:signum_beat/main.dart';
-import 'package:signum_beat/widgets/cards/playlistCard.dart';
-import 'package:signum_beat/widgets/text_widget/normal_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
 
+import '../../../api/jiosaavn/jiosaavn.dart';
 import '../../../providers/albumProvider.dart';
 import '../../../providers/playSong/playSongProvider.dart';
-import '../../../widgets/custom_card.dart';
+import '../../../widgets/cards/home_card.dart';
 import '../../tileDetails/albumDetail.dart';
 import '../../tileDetails/playlist_detail.dart';
 
 class NewTrending extends StatelessWidget {
   final List<dynamic> newTrending;
-   NewTrending({super.key, required this.newTrending});
-  final  jio = JioSaavnClient();
-  @override
-  Widget build(BuildContext context) {
+  final jio = JioSaavnClient();
 
-    final playSongProvider = Provider.of<PlaySongProvider>(context);
+  NewTrending({super.key, required this.newTrending});
 
-    return SizedBox(
-      height: 130.h,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: newTrending.length,
-        itemBuilder: (c, i) {
-          var data = newTrending[i];
-          return newTrending[i]['type'] == 'album'
-              ? CustomCard(
-                  onTap: () async {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChangeNotifierProvider(
-                          create: (_) =>
-                              AlbumProvider(id: data['details']['albumid']),
-                          child:
-                              AlbumDetails(albumId: data['details']['albumid']),
-                        ),
-                      ),
-                    );
-                  },
-                  title: NormalText(
-                    text: data['details']['title'],
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  leading: Image(image: NetworkImage(data['details']['image'])),
+  Widget _buildTrendingItem(BuildContext context, dynamic data) {
+    final playSongProvider = Provider.of<PlaySongProvider>(context, listen: false);
+
+    // Common styling for all items
+    Widget _buildItemContent({
+      required String imageUrl,
+      required String title,
+      required VoidCallback onTap,
+      Color? backgroundColor,
+    }) {
+      return GestureDetector(
+        onTap: onTap,
+        child: Container(
+          width: 160.w,
+          margin: EdgeInsets.only(right: 16.w),
+          decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  backgroundColor?.withOpacity(0.2) ?? Colors.white.withOpacity(0.2),
+                  Colors.white.withOpacity(0.1)
+                ],
+              ),
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(
+                  color: Colors.white.withOpacity(0.3),
+                  width: 1.5
+              ),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 10,
+                    offset: Offset(0, 6)
                 )
-              : newTrending[i]['type'] == 'song'
-                  ? CustomCard(
-                      onTap: () async {
-                        var song = await jio.songs
-                            .detailsById(data['details']['id']);
-                        playSongProvider.playSong(song, 0);
-                      },
-                      title: NormalText(
-                        text: data['details']['song'],
+              ]
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              // Image with overlay
+              Stack(
+                children: [
+                  Container(
+                    height: 120.h,
+                    width: 160.w,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.vertical(
+                        top: Radius.circular(20),
+                      ),
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(imageUrl),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    foregroundDecoration: BoxDecoration(
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(20),
+                        ),
+                        gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.transparent,
+                              Colors.black.withOpacity(0.3)
+                            ]
+                        )
+                    ),
+                  ),
+                  // Optional play/view icon
+                  Positioned(
+                    bottom: 8,
+                    right: 8,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      padding: EdgeInsets.all(6),
+                      child: Icon(
+                        _getIconForType(data['type']),
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              // Title
+              Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                    child: Text(
+                      title,
+                      style: TextStyle(
+                        fontSize: 13.sp,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87,
+                        letterSpacing: 0.5,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      leading:
-                          Image(image: NetworkImage(data['details']['image'])),
-                    )
-                  : data['type'] == 'playlist'
-                      ? PlaylistCard(
-                          onTap: (){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>PlayListDetail(playlistId: data['details']['listid'],)));
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
-                          },
-                          title: NormalText(
-                            text: data['details']
-                            ['listname'],
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          leading: Image(
-                              image: NetworkImage(data['details']['image'])),
-                          shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero),
-                        )
-                      : Container();
+    // Handle different types of trending items
+    switch (data['type']) {
+      case 'album':
+        return HomeCard(
+          id: data['details']['albumid'].toString(),
+          type: data['type'],
+          imageUrl: data['details']['image'],
+          title: data['details']['title'],
+          backgroundColor: Colors.blue,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChangeNotifierProvider(
+                  create: (_) => AlbumProvider(id: data['details']['albumid']),
+                  child: AlbumDetails(albumId: data['details']['albumid']),
+                ),
+              ),
+            );
+          },
+        );
+
+      case 'song':
+        return HomeCard(
+          id: data['details']['id'].toString(),
+          type: data['type'],
+          imageUrl: data['details']['image'],
+          title: data['details']['song'],
+          backgroundColor: Colors.green,
+          onTap: () async {
+            var song = await jio.songs.detailsById(data['details']['id']);
+            playSongProvider.playSong(song, 0);
+          },
+        );
+
+      case 'playlist':
+        return HomeCard(
+          type: data['type'],
+          imageUrl: data['details']['image'],
+          title: data['details']['listname'],
+          backgroundColor: Colors.purple,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => PlayListDetail(
+                  playlistId: data['details']['listid'],
+                ),
+              ),
+            );
+          }, id:  data['details']['listid'].toString(),
+        );
+
+      default:
+        return SizedBox.shrink();
+    }
+  }
+
+  // Helper method to get appropriate icon based on type
+  IconData _getIconForType(String type) {
+    switch (type) {
+      case 'album':
+        return Icons.album_outlined;
+      case 'song':
+        return Icons.play_arrow_rounded;
+      case 'playlist':
+        return Icons.queue_music_outlined;
+      default:
+        return Icons.music_note;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 150.h,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        itemCount: newTrending.length,
+        itemBuilder: (context, index) {
+
+         // return HomeCard(imageUrl: newTrending[index]['details']['image'], title:newTrending[index]['details']['listname'], type: newTrending[index]['type'], onTap: () {  },);
+          return _buildTrendingItem(context, newTrending[index]);
         },
       ),
     );
   }
+
 }
